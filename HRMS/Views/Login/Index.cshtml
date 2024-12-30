@@ -1,0 +1,35 @@
+﻿@using HRMS.Models;
+@model UserLoginViewModel
+
+<div class="container-xxl">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner">
+            <div class="card">
+                <div class="card-body">
+
+                    <form class="mb-3" method="POST">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Kullanııc Adı</label>
+                            <span asp-validation-for="Username" class="text-danger"></span>
+                            <input asp-for="Username" type="text" class="form-control" placeholder="Kullanıcı adınızı giriniz..." autofocus />
+                        </div>
+                        <div class="mb-3 form-password-toggle">
+                            <div class="d-flex justify-content-between">
+                                <label class="form-label" for="password">Şifre</label>
+                            </div>
+                            <div class="input-group input-group-merge">
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                                <input asp-for="Password" type="password" class="form-control" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <button class="btn btn-primary d-grid w-100" type="submit">Giriş Yap</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

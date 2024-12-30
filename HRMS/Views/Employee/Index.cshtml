@@ -1,0 +1,134 @@
+﻿@using HRMS.Entities;
+@model List<Employee>
+
+<div class="mb-2">
+    <a asp-controller="Employee" asp-action="AddEmployee" class="btn btn-success form-controls">Çalışan Ekle</a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Adı</th>
+            <th>Soyadı</th>
+            <th>Mail Adresi</th>
+            <th>Telefon Numarası</th>
+            <th>Doğum Yılı</th>
+            <th>Pozisyon</th>
+            <th>Ücret</th>
+            <th>#</th>
+            <th>#</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var employee in Model)
+        {
+            <tr>
+                <td>@employee.FirstName</td>
+                <td>@employee.LastName</td>
+                <td>@employee.Email</td>
+                <td>@employee.PhoneNumber</td>
+                <td>@employee.DateOfBirth.ToString("dd.MM.yyyy")</td>
+                <td>@employee.Position</td>
+                <td>@employee.Salary</td>
+                <td>
+                    <form class="sweetClass" asp-controller="Employee" asp-action="DeleteEmployee">
+                        <input type="hidden" asp-for="@employee.Id" name="Id" />
+                        <input type="hidden" asp-for="@employee.UserId" name="UserId" />
+                        <input type="hidden" asp-for="@employee.FirstName" name="FirstName" />
+                        <input type="hidden" asp-for="@employee.LastName" name="LastName" />
+                        <input type="hidden" asp-for="@employee.Email" name="Email" />
+                        <input type="hidden" asp-for="@employee.PhoneNumber" name="PhoneNumber" />
+                        <input type="hidden" asp-for="@employee.DateOfBirth" name="DateOfBirth" />
+                        <input type="hidden" asp-for="@employee.Position" name="Position" />
+                        <input type="hidden" asp-for="@employee.Salary" name="Salary" />
+                        <button class="btn btn-danger form-controls">Sil</button>
+                    </form>
+                </td>
+                <td>
+                    <a asp-controller="Employee" asp-action="UpdateEmployee" asp-route-employeeId="@employee.Id" class="btn btn-primary form-control">Detay</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section ScriptToPage {
+
+    <script>
+
+        $(document).ready(function () {
+            $('#fileInput').change(function () {
+                var file = this.files[0];
+                var fileType = file.type.toLowerCase();
+                if (fileType === 'image/jpeg' || fileType === 'image/jpg' || fileType === 'image/png') {
+
+                } else {
+                    Swal.fire({
+                        title: 'Hata!',
+                        text: 'Sadece JPG, JPEG veya PNG dosyaları kabul edilir.',
+                        icon: 'error',
+                        showConfirmButton: true
+                    });
+                    $('#fileInput').val('');
+                }
+            });
+        });
+
+
+        $(document).ready(function () {
+            $('.sweetClass').submit(function (e) {
+                e.preventDefault();
+
+                Swal.fire({
+                    title: 'Onay',
+                    text: 'Devam etmek istiyor musunuz?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Evet',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonText: 'Hayır',
+                    cancelButtonColor: '#a0153e',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var formData = new FormData($(this)[0]);
+                        $.ajax({
+                            url: $(this).attr("action"),
+                            method: $(this).attr("method"),
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        title: 'Başarılı',
+                                        text: response.message,
+                                        icon: 'success',
+                                        showConfirmButton: true
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        title: 'Hata!',
+                                        text: response.message,
+                                        icon: 'error',
+                                        showConfirmButton: true
+                                    });
+                                }
+                            },
+                            error: function () {
+                                Swal.fire({
+                                    title: 'Hata!',
+                                    text: response.message,
+                                    icon: 'error',
+                                    showConfirmButton: true
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        });
+
+
+    </script>
+
+}
